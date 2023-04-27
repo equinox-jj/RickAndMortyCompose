@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface CharacterRemoteDataSource {
     fun getCharacterList(): Flow<ApiResponse<CharacterListResponseDTO>>
     fun getSingleCharacter(charId: Int): Flow<ApiResponse<ResultsItemDTO>>
+    fun getCharacterByName(query: String): Flow<ApiResponse<CharacterListResponseDTO>>
 }

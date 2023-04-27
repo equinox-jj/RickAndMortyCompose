@@ -9,15 +9,21 @@ import androidx.compose.ui.Modifier
 @Composable
 internal fun SearchComponent(
     modifier: Modifier = Modifier,
+    searchQuery: String,
+    isSearchActive: Boolean,
+    onSearch: (String) -> Unit,
+    onQueryChange: (String) -> Unit,
+    onActiveChange: (Boolean) -> Unit,
+    leadingIcon: @Composable () -> Unit,
 ) {
     SearchBar(
         modifier = modifier,
-        query = "",
-        onQueryChange = {},
-        onSearch = {},
-        active = false,
-        onActiveChange = {},
-    ) {
-
-    }
+        query = searchQuery,
+        active = isSearchActive,
+        onActiveChange = onActiveChange,
+        onQueryChange = onQueryChange,
+        onSearch = onSearch,
+        leadingIcon = leadingIcon,
+        content = {},
+    )
 }

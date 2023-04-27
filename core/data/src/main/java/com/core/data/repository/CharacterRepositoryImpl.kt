@@ -18,7 +18,7 @@ class CharacterRepositoryImpl @Inject constructor(
     override fun getCharacterList(): Flow<Results<CharacterListResponse>> = flow {
         emit(Results.Loading)
         try {
-            characterRemoteDataSource.getCharacterList().collect() { response ->
+            characterRemoteDataSource.getCharacterList().collect { response ->
                 when (response) {
                     is ApiResponse.Success -> {
                         emit(Results.Success(response.data?.asDomain()))
@@ -39,11 +39,63 @@ class CharacterRepositoryImpl @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            emit(Results.Error(errorMessage = e.message, errorCode = null))
+            emit(Results.Error(errorMessage = e.localizedMessage, errorCode = null))
         }
     }.flowOn(Dispatchers.Default)
 
     override fun getSingleCharacter(charId: Int): Flow<Results<ResultsItem>> = flow {
+        emit(Results.Loading)
+        try {
+            characterRemoteDataSource.getSingleCharacter(charId).collect { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        emit(Results.Success(response.data?.asDomain()))
+                    }
 
-    }
+                    is ApiResponse.Empty -> {
+                        emit(Results.Success(null))
+                    }
+
+                    is ApiResponse.Error -> {
+                        emit(
+                            Results.Error(
+                                errorMessage = response.errorMessage,
+                                errorCode = response.errorCode,
+                            )
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(Results.Error(errorMessage = e.localizedMessage, errorCode = null))
+        }
+    }.flowOn(Dispatchers.Default)
+
+    override fun getCharacterByName(name: String): Flow<Results<CharacterListResponse>> = flow {
+        emit(Results.Loading)
+        try {
+            characterRemoteDataSource.getCharacterByName(name).collect { response ->
+                when (response) {
+                    is ApiResponse.Success -> {
+                        emit(Results.Success(response.data?.asDomain()))
+                    }
+
+                    is ApiResponse.Empty -> {
+                        emit(Results.Success(null))
+                    }
+
+                    is ApiResponse.Error -> {
+                        emit(
+                            Results.Error(
+                                errorMessage = response.errorMessage,
+                                errorCode = response.errorCode,
+                            )
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            emit(Results.Error(errorMessage = e.localizedMessage, errorCode = null))
+        }
+    }.flowOn(Dispatchers.Default)
 }

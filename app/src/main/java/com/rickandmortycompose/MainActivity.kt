@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.navigation.compose.rememberNavController
-import com.feature.character.characterlist.navigation.characterListScreen
+import com.core.common.utils.Destinations
 import com.rickandmortycompose.navigation.SetupNavGraph
 import com.rickandmortycompose.ui.theme.RickAndMortyComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 SetupNavGraph(
-                    startDestination = characterListScreen,
+                    startDestination = Destinations.CharacterListRoute.route,
                     navHostController = navController
                 )
             }

@@ -6,18 +6,38 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.core.common.utils.NavRoutes
+import com.core.common.utils.Destinations
 import com.feature.character.characterlist.CharacterListScreen
 import com.feature.character.characterlist.CharacterListViewModel
 
-const val characterListScreen = NavRoutes.characterListRoute
-
 @ExperimentalMaterial3Api
-fun NavGraphBuilder.characterListScreen() {
-    composable(route = characterListScreen) {
+fun NavGraphBuilder.characterListScreen(
+    navigateToDetail: (Int) -> Unit,
+) {
+    composable(route = Destinations.CharacterListRoute.route) {
         val viewModel: CharacterListViewModel = hiltViewModel()
-        val characterUiState by viewModel.charState.collectAsStateWithLifecycle()
 
-        CharacterListScreen(characterUiState = characterUiState)
+        val characterUiState by viewModel.charState.collectAsStateWithLifecycle()
+        val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
+        val isSearchActive by viewModel.isSearchActive.collectAsStateWithLifecycle()
+
+//        var query by rememberSaveable() {
+//            mutableStateOf("")
+//        }
+
+//        var active by rememberSaveable() {
+//            mutableStateOf(false)
+//        }
+
+        CharacterListScreen(
+            characterListUiState = characterUiState,
+            onCardClicked = navigateToDetail,
+            searchQuery = searchQuery,
+            isSearchActive = isSearchActive,
+            onQueryChange = viewModel::onQueryChange,
+            onSearchActiveChange = { isActive ->
+                isActive
+            },
+        )
     }
 }

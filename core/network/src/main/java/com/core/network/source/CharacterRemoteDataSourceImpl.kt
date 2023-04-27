@@ -16,28 +16,47 @@ class CharacterRemoteDataSourceImpl @Inject constructor(
 ) : CharacterRemoteDataSource {
     override fun getCharacterList(): Flow<ApiResponse<CharacterListResponseDTO>> = flow {
         try {
-            val result = apiService.getCharacterList()
-            if (result.isSuccessful && result.body() != null) {
-                emit(ApiResponse.Success(result.body()))
+            val response = apiService.getCharacterList()
+            if (response.isSuccessful && response.body() != null) {
+                emit(ApiResponse.Success(response.body()))
             } else {
                 emit(ApiResponse.Empty)
             }
         } catch (e: HttpException) {
-            when (e.code()) {
-                404 -> {
-                    emit(ApiResponse.Error(errorMessage = e.message, errorCode = e.code()))
-                }
-
-                else -> {
-                    emit(ApiResponse.Error(errorMessage = e.message, errorCode = e.code()))
-                }
-            }
+            emit(ApiResponse.Error(errorMessage = e.localizedMessage, errorCode = e.code()))
         } catch (e: Exception) {
-            emit(ApiResponse.Error(errorMessage = e.message, errorCode = null))
+            emit(ApiResponse.Error(errorMessage = e.localizedMessage, errorCode = null))
         }
     }.flowOn(Dispatchers.IO)
 
     override fun getSingleCharacter(charId: Int): Flow<ApiResponse<ResultsItemDTO>> = flow {
+        try {
+            val response = apiService.getSingleCharacter(charId)
+            if (response.isSuccessful && response.body() != null) {
+                emit(ApiResponse.Success(response.body()))
+            } else {
+                emit(ApiResponse.Empty)
+            }
+        } catch (e: HttpException) {
+            emit(ApiResponse.Error(errorMessage = e.localizedMessage, errorCode = e.code()))
+        } catch (e: Exception) {
+            emit(ApiResponse.Error(errorMessage = e.localizedMessage, errorCode = null))
+        }
+    }.flowOn(Dispatchers.IO)
 
-    }
+    override fun getCharacterByName(query: String): Flow<ApiResponse<CharacterListResponseDTO>> =
+        flow {
+            try {
+                val response = apiService.getCharacterByName(query)
+                if (response.isSuccessful && response.body() != null) {
+                    emit(ApiResponse.Success(response.body()))
+                } else {
+                    emit(ApiResponse.Empty)
+                }
+            } catch (e: HttpException) {
+                emit(ApiResponse.Error(errorMessage = e.localizedMessage, errorCode = e.code()))
+            } catch (e: Exception) {
+                emit(ApiResponse.Error(errorMessage = e.localizedMessage, errorCode = null))
+            }
+        }.flowOn(Dispatchers.IO)
 }

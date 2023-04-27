@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface CharacterRepository {
     fun getCharacterList(): Flow<Results<CharacterListResponse>>
     fun getSingleCharacter(charId: Int): Flow<Results<ResultsItem>>
+    fun getCharacterByName(name: String): Flow<Results<CharacterListResponse>>
 }
