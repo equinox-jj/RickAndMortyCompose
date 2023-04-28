@@ -14,7 +14,7 @@ interface ApiService {
 
     @GET("character/{id}")
     suspend fun getSingleCharacter(
-        @Path("{id}") charId: Int,
+        @Path("id") charId: Int,
     ): Response<ResultsItemDTO>
 
     @GET("character")

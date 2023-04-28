@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,36 +22,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.feature.character.characterlist.component.CharacterCardComponent
-import com.feature.character.characterlist.component.SearchComponent
 
 @ExperimentalMaterial3Api
 @Composable
 internal fun CharacterListScreen(
     modifier: Modifier = Modifier,
     characterListUiState: CharacterListUiState,
-    searchQuery: String,
-    isSearchActive: Boolean,
-    onQueryChange: (String) -> Unit,
-    onSearchActiveChange: (Boolean) -> Unit,
     onCardClicked: (Int) -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
+        topBar = {
+            CenterAlignedTopAppBar(
+                modifier = modifier,
+                title = { Text(text = "CharacterList") },
+            )
+        },
         content = {
             CharacterListContent(
                 modifier = Modifier.padding(paddingValues = it),
                 characterListUiState = characterListUiState,
                 onCardClicked = onCardClicked,
-                searchQuery = searchQuery,
-                isSearchActive = isSearchActive,
-                onQueryChange = onQueryChange,
-                onSearchActiveChange = onSearchActiveChange,
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon",
-                    )
-                },
             )
         },
     )
@@ -64,26 +53,9 @@ internal fun CharacterListScreen(
 internal fun CharacterListContent(
     modifier: Modifier = Modifier,
     characterListUiState: CharacterListUiState,
-    searchQuery: String,
-    isSearchActive: Boolean,
-    onQueryChange: (String) -> Unit,
-    onSearchActiveChange: (Boolean) -> Unit,
     onCardClicked: (Int) -> Unit,
-    leadingIcon: @Composable () -> Unit,
 ) {
     Column(modifier = modifier) {
-        SearchComponent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp),
-            searchQuery = searchQuery,
-            isSearchActive = isSearchActive,
-            onSearch = onQueryChange,
-            onQueryChange = onQueryChange,
-            onActiveChange = onSearchActiveChange,
-            leadingIcon = leadingIcon,
-        )
-
         when (characterListUiState) {
             is CharacterListUiState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize()) {

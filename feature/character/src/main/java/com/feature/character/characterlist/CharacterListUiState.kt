@@ -10,11 +10,3 @@ sealed interface CharacterListUiState {
         val errorCode: Int? = null,
     ) : CharacterListUiState
 }
-
-sealed interface SearchUiState {
-    object Initial : SearchUiState
-    object Empty : SearchUiState
-    object Loading : SearchUiState
-    data class Success(val data: List<ResultsItem>) : SearchUiState
-    data class Error(val errorMessage: String, val errorCode: Int)
-}

@@ -18,26 +18,10 @@ fun NavGraphBuilder.characterListScreen(
         val viewModel: CharacterListViewModel = hiltViewModel()
 
         val characterUiState by viewModel.charState.collectAsStateWithLifecycle()
-        val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
-        val isSearchActive by viewModel.isSearchActive.collectAsStateWithLifecycle()
-
-//        var query by rememberSaveable() {
-//            mutableStateOf("")
-//        }
-
-//        var active by rememberSaveable() {
-//            mutableStateOf(false)
-//        }
 
         CharacterListScreen(
             characterListUiState = characterUiState,
             onCardClicked = navigateToDetail,
-            searchQuery = searchQuery,
-            isSearchActive = isSearchActive,
-            onQueryChange = viewModel::onQueryChange,
-            onSearchActiveChange = { isActive ->
-                isActive
-            },
         )
     }
 }

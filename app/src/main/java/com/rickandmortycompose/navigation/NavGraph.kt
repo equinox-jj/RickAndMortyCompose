@@ -1,6 +1,5 @@
 package com.rickandmortycompose.navigation
 
-import android.util.Log
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -21,7 +20,6 @@ fun SetupNavGraph(
     ) {
         characterListScreen(
             navigateToDetail = {
-                Log.d("Character_Id", "Char_Id = $it")
                 navHostController.navigate(Destinations.CharacterDetailRoute.passCharId(it))
             }
         )
