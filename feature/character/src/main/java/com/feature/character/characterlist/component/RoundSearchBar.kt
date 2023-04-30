@@ -4,20 +4,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.TextField
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @ExperimentalMaterial3Api
 @Composable
-fun SearchBarComponent(
+fun RoundSearchBar(
     modifier: Modifier = Modifier,
     query: String = "",
     onQueryChange: (String) -> Unit,
 ) {
-    TextField(
+    OutlinedTextField(
         modifier = modifier,
-        singleLine = true,
         value = query,
         onValueChange = { onQueryChange(it) },
         leadingIcon = {
@@ -26,5 +25,6 @@ fun SearchBarComponent(
                 contentDescription = "Search Icon"
             )
         },
+        singleLine = true,
     )
 }

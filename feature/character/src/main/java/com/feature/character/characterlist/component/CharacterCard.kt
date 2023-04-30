@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
@@ -27,7 +27,7 @@ import coil.request.ImageRequest
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun CharacterCardComponent(
+internal fun CharacterCard(
     modifier: Modifier = Modifier,
     charId: Int = 0,
     charName: String = "",
@@ -36,7 +36,7 @@ internal fun CharacterCardComponent(
     cardShape: Shape = ShapeDefaults.Medium,
     onCardClicked: (Int) -> Unit,
 ) {
-    Card(
+    ElevatedCard(
         modifier = modifier,
         shape = cardShape,
         onClick = { onCardClicked(charId) },

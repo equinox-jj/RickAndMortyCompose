@@ -17,11 +17,14 @@ fun NavGraphBuilder.characterListScreen(
     composable(route = Destinations.CharacterListRoute.route) {
         val viewModel: CharacterListViewModel = hiltViewModel()
 
-        val characterUiState by viewModel.charState.collectAsStateWithLifecycle()
+        val characterUiState by viewModel.searchState.collectAsStateWithLifecycle()
+        val searchQuery by viewModel.searchQuery.collectAsStateWithLifecycle()
 
         CharacterListScreen(
             characterListUiState = characterUiState,
             onCardClicked = navigateToDetail,
+            searchQuery = searchQuery,
+            onSearchQueryChange = viewModel::searchCharacter
         )
     }
 }
