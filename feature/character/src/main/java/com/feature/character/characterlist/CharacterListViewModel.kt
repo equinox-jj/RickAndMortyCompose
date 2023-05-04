@@ -60,4 +60,5 @@ class CharacterListViewModel @Inject constructor(
     fun searchCharacter(query: String) {
         _searchQuery.value = query
     }
+
 }

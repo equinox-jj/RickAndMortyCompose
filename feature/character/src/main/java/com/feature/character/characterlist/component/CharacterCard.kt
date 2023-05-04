@@ -1,11 +1,17 @@
 package com.feature.character.characterlist.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -14,16 +20,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import com.feature.character.R
+import java.util.Locale
 
 @ExperimentalMaterial3Api
 @Composable
@@ -32,64 +41,78 @@ internal fun CharacterCard(
     charId: Int = 0,
     charName: String = "",
     charGender: String = "",
+    charStatus: String = "",
     charImage: String = "",
     cardShape: Shape = ShapeDefaults.Medium,
     onCardClicked: (Int) -> Unit,
 ) {
     ElevatedCard(
-        modifier = modifier,
-        shape = cardShape,
-        onClick = { onCardClicked(charId) },
+        modifier = modifier
+            .clip(cardShape)
+            .clickable { onCardClicked(charId) }
     ) {
-        Box {
+        Row(modifier = Modifier.padding(8.dp)) {
             AsyncImage(
-                modifier = Modifier.fillMaxSize(),
-                model = ImageRequest.Builder(LocalContext.current)
-                    .crossfade(800)
-                    .data(charImage)
-                    .build(),
-                contentScale = ContentScale.FillBounds,
-                contentDescription = "Character Image",
-            )
-            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(
-                                Color.Transparent,
-                                Color.Black
-                            ),
-                            startY = 250f,
-                        )
+                    .size(150.dp)
+                    .clip(cardShape),
+                model = charImage,
+                contentDescription = "Character Image",
+                contentScale = ContentScale.FillBounds
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = charName,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = TextStyle(
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontWeight = FontWeight.Bold
                     ),
-                contentAlignment = Alignment.BottomStart,
-            ) {
-                Column(
-                    modifier = Modifier.padding(
-                        start = 8.dp,
-                        end = 8.dp,
-                        bottom = 8.dp,
-                    )
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = charName,
-                        maxLines = 1,
-                        style = TextStyle(
-                            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                            color = Color.White
-                        )
+                    Box(
+                        modifier = Modifier
+                            .size(10.dp)
+                            .background(
+                                color = if (charStatus.contains("Alive")) Color.Green else Color.DarkGray,
+                                shape = CircleShape
+                            )
                     )
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = charGender,
+                        text = charStatus.capitalize(Locale.ROOT),
                         maxLines = 1,
-                        fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Ellipsis,
                         style = TextStyle(
-                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                            color = Color.White
-                        )
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Image(
+                        modifier = Modifier.size(20.dp),
+                        painter = if (charGender.contains("Male")) painterResource(
+                            id = R.drawable.male
+                        ) else painterResource(
+                            id = R.drawable.female
+                        ),
+                        contentDescription = "Gender Icon",
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = charGender.capitalize(Locale.ROOT),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium
+                        ),
                     )
                 }
             }

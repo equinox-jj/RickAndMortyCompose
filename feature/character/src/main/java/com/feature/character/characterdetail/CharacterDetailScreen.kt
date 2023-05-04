@@ -87,7 +87,8 @@ internal fun CharacterDetailContent(
                                 shape = CircleShape,
                             )
                             .align(Alignment.TopStart),
-                        onClick = { }) {
+                        onClick = { },
+                    ) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back Icon Button"

@@ -1,10 +1,13 @@
 package com.feature.character.characterlist.component
 
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -25,6 +28,9 @@ fun RoundSearchBar(
                 contentDescription = "Search Icon"
             )
         },
+        placeholder = { Text(text = "Search character...") },
         singleLine = true,
+        keyboardOptions = KeyboardOptions(),
+        keyboardActions = KeyboardActions(),
     )
 }

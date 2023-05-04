@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class CharacterRepositoryImpl @Inject constructor(
@@ -27,17 +28,10 @@ class CharacterRepositoryImpl @Inject constructor(
                     is ApiResponse.Empty -> {
                         emit(Results.Success(null))
                     }
-
-                    is ApiResponse.Error -> {
-                        emit(
-                            Results.Error(
-                                errorMessage = response.errorMessage,
-                                errorCode = response.errorCode,
-                            )
-                        )
-                    }
                 }
             }
+        } catch (e: HttpException) {
+            emit(Results.Error(errorMessage = e.localizedMessage, errorCode = e.code()))
         } catch (e: Exception) {
             emit(Results.Error(errorMessage = e.localizedMessage, errorCode = null))
         }
@@ -55,17 +49,10 @@ class CharacterRepositoryImpl @Inject constructor(
                     is ApiResponse.Empty -> {
                         emit(Results.Success(null))
                     }
-
-                    is ApiResponse.Error -> {
-                        emit(
-                            Results.Error(
-                                errorMessage = response.errorMessage,
-                                errorCode = response.errorCode,
-                            )
-                        )
-                    }
                 }
             }
+        } catch (e: HttpException) {
+            emit(Results.Error(errorMessage = e.localizedMessage, errorCode = e.code()))
         } catch (e: Exception) {
             emit(Results.Error(errorMessage = e.localizedMessage, errorCode = null))
         }
@@ -83,17 +70,10 @@ class CharacterRepositoryImpl @Inject constructor(
                     is ApiResponse.Empty -> {
                         emit(Results.Success(null))
                     }
-
-                    is ApiResponse.Error -> {
-                        emit(
-                            Results.Error(
-                                errorMessage = response.errorMessage,
-                                errorCode = response.errorCode,
-                            )
-                        )
-                    }
                 }
             }
+        } catch (e: HttpException) {
+            emit(Results.Error(errorMessage = e.localizedMessage, errorCode = e.code()))
         } catch (e: Exception) {
             emit(Results.Error(errorMessage = e.localizedMessage, errorCode = null))
         }

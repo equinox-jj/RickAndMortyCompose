@@ -22,9 +22,9 @@ fun NavGraphBuilder.characterListScreen(
 
         CharacterListScreen(
             characterListUiState = characterUiState,
-            onCardClicked = navigateToDetail,
             searchQuery = searchQuery,
-            onSearchQueryChange = viewModel::searchCharacter
+            onSearchQueryChange = viewModel::searchCharacter,
+            onCardClicked = { navigateToDetail(it) }
         )
     }
 }
