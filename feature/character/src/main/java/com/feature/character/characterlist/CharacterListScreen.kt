@@ -12,16 +12,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.core.common.components.ErrorContent
 import com.feature.character.characterlist.component.CharacterCard
 import com.feature.character.characterlist.component.RoundSearchBar
 
@@ -105,46 +102,12 @@ internal fun CharacterListContent(
             }
 
             is CharacterListUiState.Error -> {
-                ErrorContainer(
+                ErrorContent(
                     modifier = Modifier.fillMaxSize(),
                     errorMessage = characterListUiState.errorMessage.orEmpty(),
                     errorCode = characterListUiState.errorCode ?: 0,
                 )
             }
-        }
-    }
-}
-
-@Composable
-fun ErrorContainer(
-    modifier: Modifier = Modifier,
-    errorMessage: String = "",
-    errorCode: Int = 0,
-) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ) {
-        Column {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = errorMessage,
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = FontWeight.ExtraBold
-                ),
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = errorCode.toString(),
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    fontWeight = FontWeight.Bold
-                ),
-                textAlign = TextAlign.Center,
-            )
         }
     }
 }

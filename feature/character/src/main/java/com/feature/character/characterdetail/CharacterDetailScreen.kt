@@ -3,7 +3,6 @@ package com.feature.character.characterdetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,10 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.core.common.components.ErrorContent
 
 @Composable
 internal fun CharacterDetailScreen(
@@ -72,7 +71,7 @@ internal fun CharacterDetailContent(
         }
 
         is CharacterDetailUiState.Error -> {
-            ErrorContainer(
+            ErrorContent(
                 modifier = Modifier.fillMaxSize(),
                 errorMessage = characterDetailUiState.errorMessage.orEmpty(),
                 errorCode = characterDetailUiState.errorCode ?: 0
@@ -82,7 +81,7 @@ internal fun CharacterDetailContent(
 }
 
 @Composable
-private fun CharacterDetailHeader(
+internal fun CharacterDetailHeader(
     modifier: Modifier,
     characterDetailUiState: CharacterDetailUiState.Success,
     onIconBackPressed: () -> Unit,
@@ -184,40 +183,6 @@ private fun CharacterDetailHeader(
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun ErrorContainer(
-    modifier: Modifier = Modifier,
-    errorMessage: String = "",
-    errorCode: Int = 0,
-) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ) {
-        Column {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = errorMessage,
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = FontWeight.ExtraBold
-                ),
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = errorCode.toString(),
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                    fontWeight = FontWeight.Bold
-                ),
-                textAlign = TextAlign.Center,
-            )
         }
     }
 }
