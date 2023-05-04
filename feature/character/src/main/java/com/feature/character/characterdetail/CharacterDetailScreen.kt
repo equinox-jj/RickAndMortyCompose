@@ -3,10 +3,12 @@ package com.feature.character.characterdetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,21 +28,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 
 @Composable
 internal fun CharacterDetailScreen(
-    modifier: Modifier = Modifier,
     characterDetailUiState: CharacterDetailUiState,
+    onIconBackPressed: () -> Unit,
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = Modifier.fillMaxSize(),
         content = {
             CharacterDetailContent(
                 modifier = Modifier.padding(paddingValues = it),
                 characterDetailUiState = characterDetailUiState,
+                onIconBackPressed = { onIconBackPressed() }
             )
         },
     )
@@ -50,6 +54,7 @@ internal fun CharacterDetailScreen(
 internal fun CharacterDetailContent(
     modifier: Modifier = Modifier,
     characterDetailUiState: CharacterDetailUiState,
+    onIconBackPressed: () -> Unit,
 ) {
     when (characterDetailUiState) {
         is CharacterDetailUiState.Loading -> {
@@ -59,101 +64,160 @@ internal fun CharacterDetailContent(
         }
 
         is CharacterDetailUiState.Success -> {
-            Column(modifier = modifier.fillMaxSize()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                ) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(
-                                shape = RoundedCornerShape(
-                                    bottomEnd = 20.dp,
-                                    bottomStart = 20.dp,
-                                )
-                            ),
-                        model = characterDetailUiState.data?.image,
-                        contentDescription = "Character Detail Image",
-                        contentScale = ContentScale.FillBounds
-                    )
+            CharacterDetailHeader(
+                modifier = modifier,
+                characterDetailUiState = characterDetailUiState,
+                onIconBackPressed = onIconBackPressed
+            )
+        }
 
-                    IconButton(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .background(
-                                color = Color.White,
-                                shape = CircleShape,
-                            )
-                            .align(Alignment.TopStart),
-                        onClick = { },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back Icon Button"
+        is CharacterDetailUiState.Error -> {
+            ErrorContainer(
+                modifier = Modifier.fillMaxSize(),
+                errorMessage = characterDetailUiState.errorMessage.orEmpty(),
+                errorCode = characterDetailUiState.errorCode ?: 0
+            )
+        }
+    }
+}
+
+@Composable
+private fun CharacterDetailHeader(
+    modifier: Modifier,
+    characterDetailUiState: CharacterDetailUiState.Success,
+    onIconBackPressed: () -> Unit,
+) {
+    Column(modifier = modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+        ) {
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(
+                        shape = RoundedCornerShape(
+                            bottomEnd = 20.dp,
+                            bottomStart = 20.dp,
                         )
-                    }
+                    ),
+                model = characterDetailUiState.data?.image,
+                contentDescription = "Character Detail Image",
+                contentScale = ContentScale.FillBounds
+            )
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                brush = Brush.verticalGradient(
-                                    colors = listOf(
-                                        Color.Transparent,
-                                        Color.Black
-                                    ),
-                                    startY = 250f,
-                                )
+            IconButton(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .size(24.dp)
+                    .background(
+                        color = Color.Gray,
+                        shape = CircleShape,
+                    )
+                    .align(Alignment.TopStart),
+                onClick = { onIconBackPressed() },
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back Icon Button"
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                Color.Black
                             ),
-                        contentAlignment = Alignment.BottomStart,
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(
-                                start = 8.dp,
-                                end = 8.dp,
-                                bottom = 8.dp,
-                            )
-                        ) {
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = characterDetailUiState.data?.name.orEmpty(),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                style = TextStyle(
-                                    color = Color.White,
-                                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
-                                )
-                            )
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = characterDetailUiState.data?.gender.orEmpty(),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                style = TextStyle(
-                                    color = Color.White,
-                                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                            Text(
-                                modifier = Modifier.fillMaxWidth(),
-                                text = characterDetailUiState.data?.status.orEmpty(),
-                                overflow = TextOverflow.Ellipsis,
-                                maxLines = 1,
-                                style = TextStyle(
-                                    color = Color.White,
-                                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            )
-                        }
-                    }
+                            startY = 250f,
+                        ),
+                        shape = RoundedCornerShape(
+                            bottomEnd = 20.dp,
+                            bottomStart = 20.dp,
+                        )
+                    ),
+                contentAlignment = Alignment.BottomStart,
+            ) {
+                Column(
+                    modifier = Modifier.padding(
+                        start = 8.dp,
+                        end = 8.dp,
+                        bottom = 8.dp,
+                    )
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = characterDetailUiState.data?.name.orEmpty(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                            fontWeight = FontWeight.Medium,
+                        )
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = characterDetailUiState.data?.gender.orEmpty(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                            fontWeight = FontWeight.Medium,
+                        )
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = characterDetailUiState.data?.status.orEmpty(),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        style = TextStyle(
+                            color = Color.White,
+                            fontSize = MaterialTheme.typography.bodySmall.fontSize,
+                            fontWeight = FontWeight.Medium,
+                        )
+                    )
                 }
             }
         }
+    }
+}
 
-        is CharacterDetailUiState.Error -> {}
+@Composable
+fun ErrorContainer(
+    modifier: Modifier = Modifier,
+    errorMessage: String = "",
+    errorCode: Int = 0,
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        Column {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = errorMessage,
+                style = TextStyle(
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.ExtraBold
+                ),
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = errorCode.toString(),
+                style = TextStyle(
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.Bold
+                ),
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }

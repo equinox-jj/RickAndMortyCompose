@@ -12,7 +12,9 @@ import com.core.common.utils.Destinations
 import com.feature.character.characterdetail.CharacterDetailScreen
 import com.feature.character.characterdetail.CharacterDetailViewModel
 
-fun NavGraphBuilder.characterDetailScreen() {
+fun NavGraphBuilder.characterDetailScreen(
+    navigateBack: () -> Unit,
+) {
     composable(
         route = Destinations.CharacterDetailRoute.route,
         arguments = listOf(navArgument(name = CHAR_DETAIL_ARG) { type = NavType.IntType })
@@ -21,6 +23,9 @@ fun NavGraphBuilder.characterDetailScreen() {
 
         val characterUiState by viewModel.detailState.collectAsStateWithLifecycle()
 
-        CharacterDetailScreen(characterDetailUiState = characterUiState)
+        CharacterDetailScreen(
+            characterDetailUiState = characterUiState,
+            onIconBackPressed = { navigateBack() }
+        )
     }
 }

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -80,7 +81,7 @@ internal fun CharacterCard(
                         modifier = Modifier
                             .size(10.dp)
                             .background(
-                                color = if (charStatus.contains("Alive")) Color.Green else Color.DarkGray,
+                                color = colorStatus(charStatus),
                                 shape = CircleShape
                             )
                     )
@@ -96,12 +97,8 @@ internal fun CharacterCard(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = if (charGender.contains("Male")) painterResource(
-                            id = R.drawable.male
-                        ) else painterResource(
-                            id = R.drawable.female
-                        ),
+                        modifier = Modifier.size(10.dp),
+                        painter = charGenderIcon(charGender),
                         contentDescription = "Gender Icon",
                     )
                     Spacer(modifier = Modifier.width(4.dp))
@@ -117,5 +114,22 @@ internal fun CharacterCard(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun charGenderIcon(charGender: String): Painter {
+    return when {
+        charGender.contains("Male") -> painterResource(id = R.drawable.male)
+        charGender.contains("Female") -> painterResource(id = R.drawable.female)
+        else -> painterResource(id = R.drawable.male)
+    }
+}
+
+private fun colorStatus(charStatus: String): Color {
+    return when {
+        charStatus.contains("Alive") -> Color.Green
+        charStatus.contains("Dead") -> Color.Red
+        else -> Color.DarkGray
     }
 }

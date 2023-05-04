@@ -23,6 +23,10 @@ fun SetupNavGraph(
                 navHostController.navigate(Destinations.CharacterDetailRoute.passCharId(it))
             }
         )
-        characterDetailScreen()
+        characterDetailScreen(
+            navigateBack = {
+                navHostController.popBackStack()
+            }
+        )
     }
 }

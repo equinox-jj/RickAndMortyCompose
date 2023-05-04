@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -30,17 +28,16 @@ import com.feature.character.characterlist.component.RoundSearchBar
 @ExperimentalMaterial3Api
 @Composable
 internal fun CharacterListScreen(
-    modifier: Modifier = Modifier,
     characterListUiState: CharacterListUiState,
     searchQuery: String,
-    onCardClicked: (Int) -> Unit,
     onSearchQueryChange: (String) -> Unit,
+    onCardClicked: (Int) -> Unit,
 ) {
     Scaffold(
-        modifier = modifier,
+        modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
-                modifier = modifier,
+                modifier = Modifier,
                 title = { Text(text = "CharacterList") },
             )
         },
@@ -51,7 +48,7 @@ internal fun CharacterListScreen(
                     .padding(8.dp),
                 characterListUiState = characterListUiState,
                 searchQuery = searchQuery,
-                onSearchQueryChange = onSearchQueryChange,
+                onSearchQueryChange = { onSearchQueryChange(it) },
                 onCardClicked = { onCardClicked(it) }
             )
         },
@@ -75,8 +72,7 @@ internal fun CharacterListContent(
                     top = 8.dp,
                     start = 16.dp,
                     end = 16.dp
-                )
-                .clip(shape = CircleShape),
+                ),
             query = searchQuery,
             onQueryChange = { onSearchQueryChange(it) },
         )
@@ -109,34 +105,46 @@ internal fun CharacterListContent(
             }
 
             is CharacterListUiState.Error -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Column {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = characterListUiState.errorCode.toString(),
-                            style = TextStyle(
-                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                                fontWeight = FontWeight.ExtraBold
-                            ),
-                            textAlign = TextAlign.Center,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = characterListUiState.errorMessage.toString(),
-                            style = TextStyle(
-                                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                }
+                ErrorContainer(
+                    modifier = Modifier.fillMaxSize(),
+                    errorMessage = characterListUiState.errorMessage.orEmpty(),
+                    errorCode = characterListUiState.errorCode ?: 0,
+                )
             }
+        }
+    }
+}
+
+@Composable
+fun ErrorContainer(
+    modifier: Modifier = Modifier,
+    errorMessage: String = "",
+    errorCode: Int = 0,
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
+    ) {
+        Column {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = errorMessage,
+                style = TextStyle(
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.ExtraBold
+                ),
+                textAlign = TextAlign.Center,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = errorCode.toString(),
+                style = TextStyle(
+                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    fontWeight = FontWeight.Bold
+                ),
+                textAlign = TextAlign.Center,
+            )
         }
     }
 }
