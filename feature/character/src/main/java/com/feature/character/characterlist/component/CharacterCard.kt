@@ -87,7 +87,9 @@ internal fun CharacterCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = charStatus.capitalize(Locale.ROOT),
+                        text = charStatus.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                        },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = TextStyle(
@@ -103,7 +105,9 @@ internal fun CharacterCard(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = charGender.capitalize(Locale.ROOT),
+                        text = charGender.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                        },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = TextStyle(
